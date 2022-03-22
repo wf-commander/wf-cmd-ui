@@ -1,0 +1,24 @@
+trigger:
+  - master
+
+stages:
+  - stage: Build
+    displayName: Build stage
+    pool:
+        vmImage: ubuntu-latest
+
+jobs:
+  - job: buildAndPublishArtefact
+    steps:
+      - task: Npm@1
+        inputs:
+          command: 'install'
+      - task: Npm@1
+        inputs:
+          command: 'custom'
+          customCommand: 'build'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
